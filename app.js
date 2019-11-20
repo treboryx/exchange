@@ -3,7 +3,6 @@ const mysql = require("mysql");
 const dotenv = require("dotenv");
 const cors = require("cors");
 
-
 // Load env configuration
 dotenv.config({ path: "./config.env" });
 
@@ -17,6 +16,10 @@ const db = mysql.createConnection(
     database: process.env.DBNAME,
   });
 
+db.connect((err) => {
+  if (err) return console.log("Something went wrong while trying to connect to the database", err);
+  console.log("Successfully connected to the database");
+});
 
 const app = express();
 
