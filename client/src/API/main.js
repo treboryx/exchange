@@ -1,3 +1,7 @@
+// Functions that make the calls to our backend, we could do this in the .vue files but
+// in order to keep it clean we created this file
+// it also removes the need of re-writing the same code if we want to make the same call multiple times in multiple files
+
 import axios from 'axios';
 const url = 'http://localhost:5000/api/';
 export default {

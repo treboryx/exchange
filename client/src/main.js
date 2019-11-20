@@ -1,3 +1,6 @@
+// App initiation, import our packages in here such as vue, the vue-router for our routes
+// and bootstrap for quick styling
+
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';

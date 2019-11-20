@@ -1,3 +1,5 @@
+// This is the main vue-router file, we define our routes and the components 
+// that need to render when we navigate to the given route
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from './components/Main.vue';

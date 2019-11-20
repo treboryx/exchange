@@ -23,10 +23,10 @@ db.connect((err) => {
 
 const app = express();
 
-app.use(cors());
+app.use(cors()); // using this to avoid cross origin conflicts
 
-// Routes
-app.use("/api/convert/:amount/:from/:to", (req, res) => {
+// Routes, including GET, PUT, POST & DELETE requests
+app.use("/api/convert/:amount/:from/:to", (req, res) => { // convert route, calculate the conversion and serve it to the user.
   const { amount, from, to } = req.params;
   db.query(`SELECT \`${to}\` FROM \`${from}\``, function (err, results, fields) {
     if (results) {
@@ -42,7 +42,7 @@ app.use("/api/convert/:amount/:from/:to", (req, res) => {
   });
 });
 
-app.post("/api/new", (req, res) => {
+app.post("/api/new", (req, res) => { // POST request, add a new exchange rate
   const { from, to, rate } = req.query;
   // because res cannot be reached from inside the query functions below due to the depth of functions 
   // we create this function which can be accessed from inside and use it to return json data
@@ -50,18 +50,18 @@ app.post("/api/new", (req, res) => {
     res.json(message);
   };
   db.query(`SELECT \`${to}\` FROM \`${from}\``, function (err, results, fields) { // checking if the rate already exists
-    if (results) {
+    if (results) { // if it does, we return this message
       res.json({ message: "A rate already exists for this conversion." });
-    } else {
+    } else { // if it doesn't we check if the table exists (the from currency)
       db.query(`SELECT * FROM \`${from}\``, function (err, results, fields) {
-        if (results) {
+        if (results) { // if it does we alter it and add the to currency
           db.query(`ALTER TABLE \`${from}\` ADD COLUMN \`${to}\` VARCHAR(20)`, function (err, results, fields) {
             if (err) { return console.log(`There was an issue while modifying the ${from} table.`); }
-            db.query(`UPDATE \`${from}\` SET \`${to}\` = ${rate}`, function (err, results, fields) {
+            db.query(`UPDATE \`${from}\` SET \`${to}\` = ${rate}`, function (err, results, fields) { // update the data with the requested rate
               resolution({ success: "Successfully added" });
             });
           });
-        } else {
+        } else { // if it doesnt we create a new table for that currency and insert the data
           db.query(`CREATE TABLE exchange.\`${from}\` (\`${to}\` VARCHAR(20))`, function (err, res, fields) {
             if (err) { console.log(err); }
             db.query(`INSERT INTO \`${from}\` (\`${to}\`) VALUES (${rate})`, function (err, results, fields) {
@@ -75,7 +75,7 @@ app.post("/api/new", (req, res) => {
   });
 });
 
-app.put("/api/update", (req, res) => {
+app.put("/api/update", (req, res) => { // PUT request, we use this to update rates that are requested
   const { from, to, rate } = req.query;
   db.query(`UPDATE \`${from}\` SET \`${to}\` = ${rate}`, function (err, results, fields) {
     if (err) { console.log(err); }
@@ -83,7 +83,7 @@ app.put("/api/update", (req, res) => {
   });
 });
 
-app.delete("/api/delete", (req, res) => {
+app.delete("/api/delete", (req, res) => { // DELETE request, drop the requested table (currency)
   const { currency } = req.query;
   db.query(`DROP TABLE ${currency}`, function (err, results, fields) {
     if (err) {
