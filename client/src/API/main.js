@@ -23,13 +23,4 @@ export default {
     deleteCurrency(currency) {
         return axios.delete(`${url}delete?currency=${currency.toLowerCase()}`).then(response => response);
     }
-    // ,
-    // signUp(credentials) {
-    //     return axios
-    //         .post(url + 'sign-up/', credentials)
-    //         .then(response => response.data);
-    // },
-    // getSecretContent() {
-    //     return axios.get(url + 'secret-route/').then(response => response.data);
-    // }
 };
