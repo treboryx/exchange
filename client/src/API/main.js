@@ -12,7 +12,7 @@ export default {
         return axios.get(`${url}currencies/${currency.toLowerCase()}`).then(response => response);
     },
     addRate(from, to, rate) {
-        return axios.post(`${url}new?from=${from.toLowerCase()}&to=${to.toLowerCase()}&rate=${rate.toLowerCase()}`).then(response => response);
+        return axios.post(`${url}new?from=${from.toLowerCase()}&to=${to.toLowerCase()}&rate=${rate}`).then(response => response);
     },
     getRate(from, to) {
         return axios.get(`${url}rates/${from.toLowerCase()}/${to.toLowerCase()}`).then(response => response);
